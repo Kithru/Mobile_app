@@ -78,7 +78,7 @@ body {
 
 .topnav {
   overflow: hidden;
-  background-color: #575c67;
+  background-color:rgb(77, 98, 170);
 }
 
 .topnav a {
@@ -106,10 +106,9 @@ body {
 <div class="topnav">
   <a  href="{{ url('/') }}">Home</a> 
   <a  href="{{ url('/about') }}">About Us</a>
-  <a href="#contact">Contact</a>
-  <a href="#about">About</a>
+  <a  href="{{ url('/login') }}">Login</a>
 </div>
-<div class="about-section">
+<div class="about-section" style="background-image: url('images/background1.jpg'); background-size: cover; width: -80px; background-position: center;">
   <h1>Who We Are</h1>
   <p>At Cell Mart, we offer a wide range of top-quality mobile phones, accessories, and tech products to meet the needs of every customer.</p>
   <p>Our commitment to providing the latest in mobile technology, coupled with exceptional customer service, ensures that each shopping experience is seamless and satisfying.</p>
