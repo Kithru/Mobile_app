@@ -58,6 +58,9 @@
 
 <div style="overflow:auto">
 <div class="menu" style="display: flex; flex-direction: column; width: 200px; background-color: #ffff; padding: 10px 0;">
+    <div  class="menuitem" style="display: flex; justify-content: center; align-items: center; padding: 15px; margin: 5px 0; background-color: #2e5ef5; color: white; text-align: center; border-radius: 5px; cursor: pointer; height: 60px; width: 100%;">
+        <a href="{{ url('/login') }}" style="color: white; text-decoration: none; display: block; width: 100%; height: 100%; text-align: center; line-height: 30px;">Products</a>
+    </div>
     <div class="menuitem" style="display: flex; justify-content: center; align-items: center; padding: 15px; margin: 5px 0; background-color: #2e5ef5; color: white; text-align: center; border-radius: 5px; cursor: pointer; height: 60px; width: 100%;">
         <a href="{{ url('/about') }}" style="color: white; text-decoration: none; display: block; width: 100%; height: 100%; text-align: center; line-height: 30px;">About Us</a>
     </div>
