@@ -71,22 +71,24 @@ span.psw {
 </head>
 <body>
 <div style="text-align: center;"> <h2>Administrator Login</h2> </div>
-<form action="/action_page.php" method="post">
+<form action="{{ route('login') }}" method="post">
+    @csrf
   <div class="imgcontainer">
     <img src="images/login.webp" style= "height:200px;  width: 200px; " alt="Avatar" class="avatar">
   </div>
-
+  @if ($errors->any())
+    <div style="color: red; text-align: center; margin-bottom: 10px;">
+        {{ $errors->first() }}
+    </div>
+@endif
   <div class="container">
     <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" required>
+    <input type="text" placeholder="Enter Username" name="uname" value="{{old('email')}}" required>
 
     <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
+    <input type="password" placeholder="Enter Password" name="psw" value="{{old('password')}}" required>
         
     <button type="submit">Login</button>
-    <!-- <label>
-      <input type="checkbox" checked="checked" name="remember"> Remember me
-    </label> -->
     <span >Back to <a href="{{ url('/') }}">Home?</a></span>
   </div>
   

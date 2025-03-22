@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->string('cost_price');
             $table->string('sell_price');
             $table->string('description');
+            $table->integer('status');
             $table->integer('rate');
             $table->timestamps();
         });
