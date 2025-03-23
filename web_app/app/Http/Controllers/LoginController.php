@@ -24,4 +24,9 @@ class LoginController extends Controller
         }
         return redirect ()->back()->withErrors(['Invalid Credentials']);
     }
+    public function logout()
+    {
+        session()->forget('admin_logged_in'); // Destroy session
+        return redirect('/login')->with('success', 'Logged out successfully');
+    }
 }
