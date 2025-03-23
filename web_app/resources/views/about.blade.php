@@ -104,9 +104,9 @@ body {
 </head>
 <body>
 <div class="topnav">
-  <a  href="{{ url('/') }}">Home</a> 
-  <a  href="{{ url('/about') }}">About Us</a>
-  <a  href="{{ url('/login') }}">Login</a>
+  <a  href="/">Home</a> 
+  <a  href="/about">About Us</a>
+  <a  href="/login">Login</a>
 </div>
 <div class="about-section" style="background-image: url('images/background1.jpg'); background-size: cover; width: -80px; background-position: center;">
   <h1>Who We Are</h1>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MainController;
 
@@ -15,12 +16,30 @@ use App\Http\Controllers\MainController;
 |
 */
 
-Route::get('/', function () {return view('welcome');});
-Route::get('/about', function () {return view('about');});
-Route::get('/login', function () {return view('login');});
-Route::get('/admin', function () {return view('admin');});
-Route::get('/product', function () {return view('product');});
+Route::view('/', 'welcome');
 
-Route::get('/login', [LoginController::class, 'login'])->name('login'); // Show login form
-Route::post('/login', [LoginController::class, 'authenticate']);
-Route::post('/product', [MainController::class, 'addproduct'])->name('product.addproduct');
+
+Route::controller(Controller::class)->group(function () {
+    Route::get('about', 'about');
+    Route::get('product', 'product');
+    Route::get('customer', 'customer');
+    Route::get('admin', 'admin');
+});
+
+
+Route::controller(LoginController::class)->group(function () {
+    Route::get('login', 'login');             
+    Route::post('login', 'authenticate');     
+    Route::get('logout', 'logout');          
+});
+
+
+Route::controller(MainController::class)->group(function () {
+    // Route::post('addproduct', 'addproduct');              
+    Route::get('searchbrand', 'searchByBrand');          
+    Route::get('searchproname', 'searchByProductName');   
+    Route::get('searchprocost', 'searchByProductCost');   
+    Route::get('searchprosell', 'searchByProductSellPrice'); 
+
+    // Route::get('searchmbrand', 'searchManageByBrand');    
+});
