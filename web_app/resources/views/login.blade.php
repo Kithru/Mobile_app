@@ -71,7 +71,7 @@ span.psw {
 </head>
 <body>
 <div style="text-align: center;"> <h2>Administrator Login</h2> </div>
-<form action="{{ route('login') }}" method="post">
+<form action="login" method="post">
     @csrf
   <div class="imgcontainer">
     <img src="images/login.webp" style= "height:200px;  width: 200px; " alt="Avatar" class="avatar">
