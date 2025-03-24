@@ -102,11 +102,12 @@
       <a href="/about">About Us</a>
   </div>
   <div class="menuitem">
-      <a href="/login">Manage Customer</a>
+      <a href="#" onclick="showSection('managecustomer', 'Manage Customer')">Manage Customer</a>
   </div>
   <div class="menuitem">
-      <a href="/login">Search Customer</a>
+      <a href="#" onclick="showSection('searchcustomer', 'Search Customer')">Search Customer</a>
   </div>
+
   <div class="menuitem">
       <a href="/">Home</a>
   </div>
@@ -119,58 +120,237 @@
         alert("{{ session('success') }}");
     </script>
 @endif
-<form action="/addproduct" method="POST" enctype="multipart/form-data">
-    @csrf
-  <div class="container" style="padding: 20px;">
-    <!-- Brand dropdown -->
-    <div class="form-group">
-      <label for="brand"><b>Brand</b></label>
-      <select id="brand" name="brand" style="width: 100%; padding: 12px 20px; margin: 8px 0; border: 1px solid #ccc;" required>
-        <option value="">Select Brand</option>
-        <option value="Apple">Apple</option>
-        <option value="Samsung">Samsung</option>
-        <option value="OnePlus">OnePlus</option>
-        <option value="Google">Google</option>
-      </select>
-    </div>
-
-    <!-- Product Name -->
-    <div class="form-group">
-      <label for="product_name"><b>Product Name</b></label>
-      <input type="text" id="product_name" placeholder="Enter Product Name" name="product_name" value="{{ old('product_name') }}" required>
-    </div>
-
-    <!-- Product Image -->
-    <div class="form-group">
-      <label for="product_image"><b>Product Image</b></label>
-      <input type="file" id="product_image" style="width: 100%; padding-left: 10px; margin-top:15px; margin-bottom:15px;" name="product_image" required>
-    </div>
-
-    <!-- Quantity -->
-    <div class="form-group">
-      <label for="quantity"><b>Quantity</b></label>
-      <input type="text" id="quantity" placeholder="Enter Quantity" name="quantity" value="{{ old('quantity') }}" required>
-    </div>
-
-    <!-- Cost Price -->
-    <div class="form-group">
-      <label for="cost_price"><b>Cost Price</b></label>
-      <input type="text" id="cost_price" placeholder="Enter Cost Price" name="cost_price" value="{{ old('cost_price') }}" required>
-    </div>
-
-    <!-- Sell Price -->
-    <div class="form-group">
-      <label for="sell_price"><b>Sell Price</b></label>
-      <input type="text" id="sell_price" placeholder="Enter Sell Price" name="sell_price" value="{{ old('sell_price') }}" required>
-    </div>
-      
-    <button type="submit">Submit</button>
+<div id="searchcustomer" style="display: none; margin-bottom: 20px;">
+  <h1 style="text-align: center; margin-bottom: 20px;">Search Customer</h1>
+  <div style="display: flex; justify-content: center; text-align: center;">
+    <form style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+      <label>
+        <input type="radio" name="searchOption" value="fname" onclick="showSearchField('fname')"> Search by First Name
+      </label>
+      <label>
+        <input type="radio" name="searchOption" value="lname" onclick="showSearchField('lname')"> Search by Last Name
+      </label>
+      <label>
+        <input type="radio" name="searchOption" value="email" onclick="showSearchField('email')"> Search by Email
+      </label>
+      <label>
+        <input type="radio" name="searchOption" value="contact" onclick="showSearchField('contact')"> Search by Contact
+      </label>
+    </form>
   </div>
-</form>
 
+  <form action="/searchcustomer" method="GET">
+    <div id="fname" style="display:none; max-width: 400px; margin: 20px auto;">
+      <label for="fname"><b>First Name</b></label>
+      <input type="text" name="fname" placeholder="Enter First Name" required>
+      <button type="submit">Search</button>
+    </div>
+    <div id="lname" style="display:none; max-width: 400px; margin: 20px auto;">
+      <label for="lname"><b>Last Name</b></label>
+      <input type="text" name="lname" placeholder="Enter Last Name" required>
+      <button type="submit">Search</button>
+    </div>
+    <div id="email" style="display:none; max-width: 400px; margin: 20px auto;">
+      <label for="email"><b>Email</b></label>
+      <input type="email" name="email" placeholder="Enter Email" required>
+      <button type="submit">Search</button>
+    </div>
+    <div id="contact" style="display:none; max-width: 400px; margin: 20px auto;">
+      <label for="contact"><b>Contact</b></label>
+      <input type="text" name="contact" placeholder="Enter Contact Number" required>
+      <button type="submit">Search</button>
+    </div>
+  </form>
+
+  <div id="results">
+    @if(isset($customers) && count($customers) > 0)
+      <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($customers as $customer)
+            <tr>
+              <td>{{ $customer->fname }}</td>
+              <td>{{ $customer->lname }}</td>
+              <td>{{ $customer->email }}</td>
+              <td>{{ $customer->contact }}</td>
+              <td>{{ $customer->address }}</td>
+              <td>{{ $customer->status == 1 ? 'Active' : 'Inactive' }}</td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    @else
+      <p>No customers found.</p>
+    @endif
+  </div>
+</div>
+
+<div id="managecustomer" style="display: none; justify-content: center; margin-bottom: 20px;">
+  <h1 style="text-align: center; margin-bottom: 20px;">Manage Customer</h1>
+  <div style="display: flex; justify-content: center; text-align: center;">
+    <form style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+      <label>
+        <input type="radio" name="manageOption" value="fname" onclick="showManageField('managefname')"> Manage by First Name
+      </label>
+      <label>
+        <input type="radio" name="manageOption" value="lname" onclick="showManageField('managelname')"> Manage by Last Name
+      </label>
+      <label>
+        <input type="radio" name="manageOption" value="email" onclick="showManageField('manageemail')"> Manage by Email
+      </label>
+      <label>
+        <input type="radio" name="manageOption" value="contact" onclick="showManageField('managecontact')"> Manage by Contact
+      </label>
+      <label>
+        <input type="radio" name="manageOption" value="status" onclick="showManageField('managestatus')"> Manage by Status
+      </label>
+    </form>
+  </div>
+
+  <form action="/managecustomer" method="GET">
+    <!-- Manage by First Name -->
+    <div id="managefname" style="display:none; max-width: 400px; margin: 20px auto;">
+      <label for="fname"><b>First Name</b></label>
+      <input type="text" name="fname" placeholder="Enter First Name" required>
+      <button type="submit">Search</button>
+    </div>
+
+    <!-- Manage by Last Name -->
+    <div id="managelname" style="display:none; max-width: 400px; margin: 20px auto;">
+      <label for="lname"><b>Last Name</b></label>
+      <input type="text" name="lname" placeholder="Enter Last Name" required>
+      <button type="submit">Manage</button>
+    </div>
+
+    <!-- Manage by Email -->
+    <div id="manageemail" style="display:none; max-width: 400px; margin: 20px auto;">
+      <label for="email"><b>Email</b></label>
+      <input type="email" name="email" placeholder="Enter Email" required>
+      <button type="submit">Manage</button>
+    </div>
+
+    <!-- Manage by Contact -->
+    <div id="managecontact" style="display:none; max-width: 400px; margin: 20px auto;">
+      <label for="contact"><b>Contact</b></label>
+      <input type="text" name="contact" placeholder="Enter Contact Number" required>
+      <button type="submit">Manage</button>
+    </div>
+
+    <!-- Manage by Status -->
+    <div id="managestatus" style="display:none; max-width: 400px; margin: 20px auto;">
+      <label for="status"><b>Status</b></label>
+      <select name="status" required>
+        <option value="">Select Status</option>
+        <option value="1">Active</option>
+        <option value="0">Inactive</option>
+      </select>
+      <button type="submit">Manage</button>
+    </div>
+  </form>
+
+  <div id="results">
+    @if(isset($customers) && count($customers) > 0)
+      <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($customers as $customer)
+            <tr>
+              <td>{{ $customer->fname }}</td>
+              <td>{{ $customer->lname }}</td>
+              <td>{{ $customer->email }}</td>
+              <td>{{ $customer->contact }}</td>
+              <td>{{ $customer->address }}</td>
+              <td>{{ $customer->status == 1 ? 'Active' : 'Inactive' }}</td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    @else
+      <p>No customers found.</p>
+    @endif
+  </div>
+</div>
 
 <!-- Footer -->
 <div style="background-color:#cdd9f2; text-align:center; padding:10px; margin-top:7px; font-size:12px;"> KV </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+
+
+function showSection(sectionId, headerText) {
+    // Hide all sections
+    document.getElementById("searchcustomer").style.display = "none";
+    document.getElementById("managecustomer").style.display = "none";
+
+    // Show the selected section
+    document.getElementById(sectionId).style.display = "block";
+    // header text
+    document.getElementById("header-title").innerText = headerText;
+}
+
+
+function showSearchField(field) {
+    // Hide all search sections
+    document.getElementById("fname").style.display = "none";
+    document.getElementById("lname").style.display = "none";
+    document.getElementById("email").style.display = "none";
+    document.getElementById("contact").style.display = "none";
+
+    document.getElementById(field).style.display = "block";
+  }
+  function showManageField(field) {
+    // Hide all search sections
+    document.getElementById("fname").style.display = "none";
+    document.getElementById("lname").style.display = "none";
+    document.getElementById("email").style.display = "none";
+    document.getElementById("contact").style.display = "none";
+
+    document.getElementById(field).style.display = "block";
+  }
+
+  function showSearchField(id) {
+    const allFields = ['probrand', 'productname', 'procost', 'prosell'];
+    // Hide all fields
+    allFields.forEach(field => {
+      document.getElementById(field).style.display = 'none';
+    });
+    // Show the selected field
+    document.getElementById(id).style.display = 'block';
+  }
+
+  // Function to show the corresponding manage field and hide others
+  function showManageField(id) {
+    const allFields = ['mprobrand', 'mproductname', 'mprocost', 'mprosell'];
+    // Hide all fields
+    allFields.forEach(field => {
+      document.getElementById(field).style.display = 'none';
+    });
+    // Show the selected field
+    document.getElementById(id).style.display = 'block';
+  }
+
+  
+</script>
+
 
 </body>
 </html>

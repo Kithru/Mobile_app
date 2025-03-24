@@ -138,6 +138,7 @@ th {
         alert("{{ session('success') }}");
     </script>
 @endif
+<!-- //////////////////////////////////// Add Products  ////////////////////////////////////////////// -->
 <div id="addpro">
   <form action="/addproduct" method="POST" enctype="multipart/form-data">
       @csrf
@@ -189,6 +190,65 @@ th {
     </div>
   </form>
 </div>
+
+<!-- /////////////////////////// Manage Products /////////////////////////////////////////// -->
+<div id="manage" style="display: none; border: 1px solid black; padding: 20px;">
+<form action="/manageproduct" method="POST" enctype="multipart/form-data">
+      @csrf
+    <div class="container" style="padding: 20px;">
+      <!-- Brand dropdown -->
+      <div class="form-group">
+        <label for="mbrand"><b>Brand</b></label>
+        <select id="mbrand" name="mbrand" style="width: 100%; padding: 12px 20px; margin: 8px 0; border: 1px solid #ccc;" required>
+          <option value="">Select Brand</option>
+          <option value="Apple">Apple</option>
+          <option value="Samsung">Samsung</option>
+          <option value="OnePlus">OnePlus</option>
+          <option value="Google">Google</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="product_name"><b>Product Name</b></label>
+        <input type="text" id="mproduct_name" placeholder="Enter Product Name" name="mproduct_name" value="{{ old('product_name') }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="product_image"><b>Product Image</b></label>
+        <input type="file" id="mproduct_image" style="width: 100%; padding-left: 10px; margin-top:15px; margin-bottom:15px;" name="mproduct_image" required>
+      </div>
+
+      <div class="form-group">
+        <label for="quantity"><b>Quantity</b></label>
+        <input type="text" id="mquantity" placeholder="Enter Quantity" name="mquantity" value="{{ old('quantity') }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="quantity"><b>Description</b></label>
+        <input type="text" id="mdescription" placeholder="Enter Description" name="mdescription" value="{{ old('description') }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="cost_price"><b>Cost Price</b></label>
+        <input type="text" id="mcost_price" placeholder="Enter Cost Price" name="mcost_price" value="{{ old('cost_price') }}" required>
+      </div>
+
+      <!-- Sell Price -->
+      <div class="form-group">
+        <label for="sell_price"><b>Sell Price</b></label>
+        <input type="text" id="msell_price" placeholder="Enter Sell Price" name="msell_price" value="{{ old('sell_price') }}" required>
+      </div>
+        
+      <button type="submit">Save</button>
+      <button type="button" onclick="$('#manage').hide()">Close</button>
+    </div>
+  </form>
+</div>
+
+
+
+
+
 
 <div id="searchpro" style="display: none; margin-bottom: 20px;">
   <h1 style="text-align: center; margin-bottom: 20px;">Search</h1>
@@ -380,7 +440,7 @@ th {
                           <td>Rs.{{ number_format($product->cost_price, 2) }}</td>
                           <td>{{ $product->quantity }}</td>
                           <td>
-                              <a href="#" style="text-decoration: none; color: blue;">Manage</a>
+                             <a href="#" class="manage-btn" data-id="{{ $product->id }}" style="text-decoration: none; color: blue;">Manage</a>
                           </td>
                           <td>
                             <a href="#" style="text-decoration: none; color: {{ $product->status == 0 ? 'green' : 'red' }};">
@@ -427,7 +487,6 @@ function showSearchField(field) {
     document.getElementById(field).style.display = "block";
   }
   function showManageField(field) {
-    // Hide all search sections
     document.getElementById("mprobrand").style.display = "none";
     document.getElementById("mproductname").style.display = "none";
     document.getElementById("mprocost").style.display = "none";
@@ -438,24 +497,55 @@ function showSearchField(field) {
 
   function showSearchField(id) {
     const allFields = ['probrand', 'productname', 'procost', 'prosell'];
-    // Hide all fields
     allFields.forEach(field => {
       document.getElementById(field).style.display = 'none';
     });
-    // Show the selected field
     document.getElementById(id).style.display = 'block';
   }
 
-  // Function to show the corresponding manage field and hide others
   function showManageField(id) {
     const allFields = ['mprobrand', 'mproductname', 'mprocost', 'mprosell'];
-    // Hide all fields
     allFields.forEach(field => {
       document.getElementById(field).style.display = 'none';
     });
-    // Show the selected field
     document.getElementById(id).style.display = 'block';
   }
+
+  $(document).ready(function() {
+    $(".manage-btn").click(function(event) {
+        event.preventDefault(); 
+
+        let productId = $(this).data("id"); 
+        $.ajax({
+            url: "/get-product/" + productId, 
+            type: "GET",
+            success: function(response) {
+                if (response.success) {
+                    $("#mbrand").val(response.data.brand);
+                    $("#mproduct_name").val(response.data.product_name);
+                    $("#mquantity").val(response.data.quantity);
+                    $("#mdescription").val(response.data.description);
+                    $("#mcost_price").val(response.data.cost_price);
+                    $("#msell_price").val(response.data.sell_price);
+                    if (response.data.product_image) {
+                        $("#preview_image").attr("src", response.data.product_image).show();
+                    } else {
+                        $("#preview_image").hide();
+                    }
+
+                    $("#manage").show(); 
+                } else {
+                    alert("Product not found!");
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("Error fetching product details: " + xhr.status + " " + xhr.statusText);
+                console.log(xhr.responseText);
+            }
+        });
+    });
+});
+
 
   
 </script>
