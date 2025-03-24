@@ -39,7 +39,22 @@ Route::controller(MainController::class)->group(function () {
     Route::get('searchbrand', 'searchByBrand');          
     Route::get('searchproname', 'searchByProductName');   
     Route::get('searchprocost', 'searchByProductCost');   
+    Route::get('searchprosell', 'searchByProductSellPrice');
     Route::get('searchprosell', 'searchByProductSellPrice'); 
-
+    Route::get('/get-product/{id}', 'getProduct');
     // Route::get('searchmbrand', 'searchManageByBrand');    
 });
+
+// Route::get('/get-product/{id}', 'getProduct');
+
+// Route::get('/get-product/{id}', function ($id) {
+//     $product = Product::find($id);
+//     if ($product) {
+//         return response()->json([
+//             'success' => true,
+//             'data' => $product
+//         ]);
+//     } else {
+//         return response()->json(['success' => false]);
+//     }
+// });

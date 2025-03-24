@@ -147,6 +147,32 @@ class MainController extends Controller
             return redirect()->back()->with('error', 'Please select a brand');
         }
     }
+    public function getProduct($id){
+        $product = Product::find($id);
+
+        if ($product) {
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id' => $product->id,
+                    'brand' => $product->brand,
+                    'product_name' => $product->product_name,
+                    'quantity' => $product->quantity,
+                    'description' => $product->description,
+                    'cost_price' => $product->cost_price,
+                    'sell_price' => $product->sell_price,
+                    'product_image' => $product->productimage ? asset('public/uploads/' . $product->productimage) : null
+                ]
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found'
+            ], 404);
+        }
+    }
+
+
     
 }
 
